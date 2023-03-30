@@ -22,6 +22,7 @@ class Field {
         let fieldElement;
         for (let fieldHeight = 0; fieldHeight<height; fieldHeight++) {
             let xArrays = [];
+            xArrays.push(" ") 
             for (let fieldWidth = 0; fieldWidth<width; fieldWidth++) {               
                 let fieldSelector = Math.floor(Math.random()*8);
                 if (fieldSelector === 1) {
@@ -29,23 +30,24 @@ class Field {
                 } else {
                     fieldElement = '░'
                 }
-                xArrays.push(fieldElement);                                 
+                xArrays.push(fieldElement);                                              
             }   
+             
             yArrays.push(xArrays);     
         } 
-        yArrays[0][0] = pathCharacter; 
+        yArrays[0][1] = pathCharacter; 
         const hatX = (width/2)+(Math.floor(Math.random()*width/2));
         const hatY = (height/2)+(Math.floor(Math.random()*height/2));
         yArrays[hatY-1][hatX-1] = hat;
         return yArrays;                                                              
-    } 
-    
+    }     
 }
 
 const myField = new Field(Field.generateField(20, 10));
 
 let inHole = false;
 let foundHat = false;
+let outOfBounds = false;
 let endGame = false;
 myField.print();
 
@@ -69,9 +71,9 @@ findHat = () => {
     }    
 }
 
-setUserPosition = (x, y) => {
-    findUser();
-    myField.field[userPosition[1]][userPosition[0]] = fieldCharacter;       
+setUserPosition = (x, y) => { 
+    findUser();    
+    myField.field[userPosition[1]][userPosition[0]] = " ";    
     if (myField.field[y][x] === 'O') {
         inHole = true;
         myField.print();
@@ -79,8 +81,9 @@ setUserPosition = (x, y) => {
         foundHat = true;
         myField.field[y][x] = pathCharacter;
         myField.print();
-    } else if (myField.field[y][x] === '') {
+    } else if (myField.field[y].length === x || x === 0) {        
         outOfBounds = true;
+        console.log(userPosition[0]);
         myField.field[y][x] = pathCharacter;
         myField.print();
     } else {
@@ -88,7 +91,9 @@ setUserPosition = (x, y) => {
         myField.print();
         findUser();
     };
-    if (inHole === true || foundHat === true){
+    console.log(x);
+    console.log(outOfBounds);
+    if (inHole === true || foundHat === true || outOfBounds === true){
         endGame = true;
     } 
 }
@@ -121,7 +126,7 @@ play = () => {
     findUser();
     findHat();
     while (endGame === false) {
-        let input = prompt("Your move: ");    
+      let input = prompt("Your move: ");    
         if (input === 'd') {
             userRight();
          } else if (input === 's') {
@@ -136,7 +141,10 @@ play = () => {
         console.log("You fell down a hole!")
     } else if (foundHat === true) {
         console.log ("You found your hat!")
-    }
+    } else if (outOfBounds === true) (
+        console.log("You left the field!")
+    )
 }
+
 
 play();
