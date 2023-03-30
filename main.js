@@ -22,7 +22,7 @@ class Field {
         let fieldElement;
         for (let fieldHeight = 0; fieldHeight<height; fieldHeight++) {
             let xArrays = [];
-            xArrays.push(" ") 
+            xArrays.push(" ");
             for (let fieldWidth = 0; fieldWidth<width; fieldWidth++) {               
                 let fieldSelector = Math.floor(Math.random()*8);
                 if (fieldSelector === 1) {
@@ -32,8 +32,8 @@ class Field {
                 }
                 xArrays.push(fieldElement);                                              
             }   
-             
-            yArrays.push(xArrays);     
+            
+            yArrays.push(xArrays);    
         } 
         yArrays[0][1] = pathCharacter; 
         const hatX = (width/2)+(Math.floor(Math.random()*width/2));
@@ -73,17 +73,20 @@ findHat = () => {
 
 setUserPosition = (x, y) => { 
     findUser();    
-    myField.field[userPosition[1]][userPosition[0]] = " ";    
-    if (myField.field[y][x] === 'O') {
+    myField.field[userPosition[1]][userPosition[0]] = " "; 
+    if (y===-1 || y === myField.field.length) {
+        outOfBounds = true;
+        console.log(userPosition[0]);
+        myField.print();    
+    } else if (myField.field[y].length === x || x === 0) {        
+        outOfBounds = true;
+        console.log(userPosition[0]);
+        myField.print();     
+    } else if (myField.field[y][x] === 'O') {
         inHole = true;
         myField.print();
     } else if (myField.field[y][x] === '^') {
         foundHat = true;
-        myField.field[y][x] = pathCharacter;
-        myField.print();
-    } else if (myField.field[y].length === x || x === 0) {        
-        outOfBounds = true;
-        console.log(userPosition[0]);
         myField.field[y][x] = pathCharacter;
         myField.print();
     } else {
